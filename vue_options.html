@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue选项</title>
+	<script type="text/javascript" src="js/vue.js"></script>
+</head>
+<body>
+
+
+	<headerone></headerone>
+<script>
+	var header_1 = Vue.extend({
+		template: `<h1>{{a}}-{{message}}</h1>`,
+		data: function () {
+			return {
+				message: "This is a Vue.extend."
+			}
+		},
+		props: ["a"]
+	})
+	new header_1({propsData: {a: 1}}).$mount("headerone");
+</script>
+
+<div class="cptdDiv">
+	<h1>2-computed——数据整理重计算</h1>
+	<ul>
+		<li v-for="item in goods">
+			<p>{{item.name}}:{{item.price}}</p>
+		</li>
+	</ul>
+	<ul>
+		<li v-for="item in goodsData">
+			<p>{{item.name}}:{{item.price}}</p>
+		</li>
+	</ul>
+</div>
+<script>
+	var cptdDiv = new Vue({
+		el: ".cptdDiv",
+		data: {
+			goods: [{
+				name: 'apples',
+				price: 100
+			},{
+				name: 'bananas',
+				price: 200
+			},{
+				name: 'orange',
+				price: 50
+			}]
+		},
+		computed: {
+			goodsData: function () {
+				var newData = []
+				this.goods.map(it => {
+					newData.push({
+						name: it.name,
+						price: '￥'+it.price+'yuan'
+					})
+				})
+				return newData
+			}
+		}
+	})
+</script>
+
+<div class="mtdsDiv">
+	<p>{{count}}</p>
+	<p><input type="number" v-model="num"></p>
+	<button v-on:click="addCount">addCount</button>
+	<add v-on:click.native="addCount"></add>
+</div>
+<button onclick="mtdsDiv.addCount()">外部btn实现add</button>
+<script>
+	var add = {
+		template: `<button>组件add</button>`
+	}
+	var mtdsDiv = new Vue({
+		el: ".mtdsDiv",
+		data: {
+			count: 0,
+			num: 1
+		},
+		methods: {
+			addCount: function () {
+				this.count += parseInt(this.num)
+			}
+		},
+		components: {
+			"add": add
+		}
+	})
+</script>
+
+</body>
+</html>
