@@ -93,5 +93,109 @@
 	})
 </script>
 
+<div class="watchDiv">
+	<h1>watch</h1>
+	<p>今日温度：{{temp}}℃</p>
+	<p>穿衣建议：{{cloth}}</p>
+	<button v-on:click="tempAdd">温度升高</button>
+	<button v-on:click="tempRds">温度降低</button>
+</div>
+<script>
+	var watchDiv = new Vue({
+		el: '.watchDiv',
+		data: {
+			temp: 14,
+			cloth: '夹克长裙',
+			cloths: ["T恤短袖", "夹克长裙", "棉衣羽绒服"],
+			num: 4
+		},
+		methods: {
+			tempAdd: function () {
+				this.temp+=this.num
+			},
+			tempRds: function () {
+				this.temp-=this.num
+			}
+		},
+		watch: {
+			temp: function (newVal, oldVal) {
+				if (newVal >= 20) {
+					this.cloth = this.cloths[0]
+				}else if (newVal < 6) {
+					this.cloth = this.cloths[2]
+				}else{
+					this.cloth = this.cloths[1]
+				}
+			}
+		}
+	})
+</script>
+
+<div class="mixinsDiv">
+	<h1>Mixins</h1>
+	<p>{{num}}</p>
+	<button v-on:click="addNum">add</button>
+	<button v-on:click="reduceNum">reduce</button>
+</div>
+<script>
+	var addConsole = {
+		updated: function () {
+			console.log('数据发生变化为' + this.num)
+		}
+	}
+	Vue.mixin({
+		updated: function () {
+			console.log('我是全局的混入，数据发生变化为' + this.num)
+		}
+	});
+	var mixinsDiv = new Vue({
+		el: '.mixinsDiv',
+		data: {
+			num: 1
+		},
+		methods: {
+			addNum: function () {
+				this.num++
+			},
+			reduceNum: function () {
+				this.num--
+			}
+		},
+		mixins: [addConsole],
+		updated: function () {
+			console.log('我是原生update，数据发生变化为' + this.num)
+		}
+	})
+</script>
+
+<div class="extendDiv">
+	<h1>extend</h1>
+	<p>{{num}}</p>
+	<button v-on:click="addNum">add</button>
+	<button v-on:click="reduceNum">reduce</button>
+</div>
+<script>
+	var extendObj = {
+		updated: function () {
+			console.log('我是扩展的updated.');
+		}
+	}
+	var extendDiv = new Vue({
+		el: '.extendDiv',
+		data: {
+			num: 1
+		},
+		methods: {
+			addNum: function () {
+				this.num++
+				console.log('我是原生的console')
+			},
+			reduceNum: function () {
+				this.num--
+			}
+		},
+		extends: extendObj
+	})
+</script>
 </body>
 </html>
